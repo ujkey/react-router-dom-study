@@ -38,3 +38,47 @@ const router = createBrowserRouter([
 
 // ...
 ```
+
+<br/>
+
+## Not Found Errors Route : 에러 페이지 커스텀
+
+렌더링, 데이터 로드 또는 데이터 변경 중에 오류가 발생하면, 리액트 라우터는 이를 포착해서 404 페이지를 렌더링한다.
+
+UX뿐만 아니라 DX를 위해 오류 페이지를 커스텀하면 좋다.
+
+### 에러 페이지 커스텀하기
+
+`useRouteError`를 사용하면, 라우터에서 발생한 오류를 받아올 수 있다.
+
+```jsx
+import { useError } from "react-error-boundary";
+
+function ErrorPage() {
+  const { error, resetErrorBoundary } = useError(); // ✅
+
+  return (
+    <div>
+      <h1>Something went wrong</h1>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  );
+}
+```
+
+### 커스텀 에러 페이지 등록하기
+
+루트 `errorElement`에 추가하면, 라우터가 오류가 발생했을 때, 커스텀 에러 페이지를 렌더링한다.
+
+```jsx
+import ErrorPage from "./error-page";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />, // ✅
+  },
+]);
+```
