@@ -47,7 +47,7 @@ const router = createBrowserRouter([
 
 UX뿐만 아니라 DX를 위해 오류 페이지를 커스텀하면 좋다.
 
-### 에러 페이지 커스텀하기
+### 1. 에러 페이지 커스텀하기
 
 `useRouteError`를 사용하면, 라우터에서 발생한 오류를 받아올 수 있다.
 
@@ -67,7 +67,7 @@ function ErrorPage() {
 }
 ```
 
-### 커스텀 에러 페이지 등록하기
+### 2. 커스텀 에러 페이지 등록하기
 
 루트 `errorElement`에 추가하면, 라우터가 오류가 발생했을 때, 커스텀 에러 페이지를 렌더링한다.
 
@@ -81,4 +81,50 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />, // ✅
   },
 ]);
+```
+
+<br/>
+
+## Nested Routes : 중첩 라우트
+
+### 1. 중첩 라우트 구성 - `children`
+
+루트 라우트에 하위 경로를 추가하여 중첩 라우트를 구성할 수 있다.
+
+```jsx
+import Contact from "./routes/contact";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "contact/:contactId",
+        element: <Contact />, // ✅
+      },
+    ],
+  },
+]);
+```
+
+### 2. 중첩 라우트 렌더링 위치 지정 - `<Outlet/>`
+
+`<Outlet/>`을 활용하여 중첩된 경로를 렌더링할 위치를 루트 경로에 알려주어야 한다.
+
+```jsx
+// src/routes/root.js
+import { Outlet } from "react-router-dom";
+
+export default function Root() {
+  return (
+    <>
+      {/* ... */}
+      <div id="detail">
+        <Outlet />
+      </div>
+    </>
+  );
+}
 ```

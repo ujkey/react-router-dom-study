@@ -1,5 +1,7 @@
 // 전역 레이아웃 정의
 
+import { Outlet } from "react-router-dom";}
+
 const Root = () => {
   return (
     <>
@@ -32,7 +34,7 @@ const Root = () => {
           </ul>
         </nav>
       </div>
-      <div id="detail"></div>
+      <div id="detail"><Outlet/></div> {/* 하위 경로를 렌더링할 위치를 지정 */}
     </>
   );
 };
