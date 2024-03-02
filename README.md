@@ -19,3 +19,22 @@ npm install react-router-dom localforage match-sorter sort-by
 `Browser Router`를 생성하고, `root route`를 추가한다.
 
 그러면 웹사이트의 URL이 변경될 때마다, 라우터는 URL을 읽고, URL에 맞는 컴포넌트를 렌더링한다.(클라이언트 사이드 라우팅 활성화)
+
+<br/>
+
+## Root Route : 루트 라우트
+
+### 루트 레이아웃 설정
+
+```jsx
+import Root from "./routes/root"; // 루트 레이아웃 컴포넌트
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+  },
+]);
+
+// ...
+```
