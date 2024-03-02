@@ -1,8 +1,11 @@
 // 전역 레이아웃 정의
 
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLoaderData } from "react-router-dom";
+import { getContacts } from "../contacts";
 
 const Root = () => {
+  const { contacts } = useLoaderData();
+
   return (
     <>
       <div id="sidebar">
@@ -24,16 +27,29 @@ const Root = () => {
           </form>
         </div>
         <nav>
-          <ul>
-            <li>
-              {/* <a href={`/contact/1`}>Your Name</a> */}
-              <Link to={`/contact/1`}>Your Name</Link>
-            </li>
-            <li>
-              {/* <a href={`/contact/2`}>Your Friend</a> */}
-              <Link to={`/contact/2`}>Your Friend</Link>
-            </li>
-          </ul>
+          {/* access loader data */}
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <Link to={`contacts/${contact.id}`}>
+                    {contact.first || contact.last ? (
+                      <>
+                        {contact.first} {contact.last}
+                      </>
+                    ) : (
+                      <i>No Name</i>
+                    )}{" "}
+                    {contact.favorite && <span>★</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>No contacts</i>
+            </p>
+          )}
         </nav>
       </div>
       <div id="detail">
@@ -45,3 +61,11 @@ const Root = () => {
 };
 
 export default Root;
+
+// 루트 모듈에서 로더 함를 생성, 내보내기
+export async function loader() {
+  const contacts = await getContacts();
+  console.log(contacts, "contacts");
+
+  return { contacts };
+}

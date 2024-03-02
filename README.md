@@ -163,3 +163,101 @@ export default function Root() {
   );
 }
 ```
+
+<br/>
+
+## Data loader : 데이터 로더
+
+리액트 라우터는 데이터를 라우트 컴포넌트로 쉽게 로드할 수 있도록 도와준다.
+
+이는 서버에 요청하지 않고 데이터를 가능한 빨리 가져와 라우트 컴포넌트에 전달함으로써 사용자 경험을 향상시킬 수 있다.
+
+### 1. 데이터 로더 정의, 내보내기
+
+데이터 `loader` 를 정의하고, 루트 모듈에서 내보낸다.
+
+이 데이터 로더는 각 라우트가 렌더링되기 전에 데이터를 제공하는 데 사용된다.
+
+```jsx
+// root.jsx
+import { getContacts } from "../contacts";
+
+// 루트 모듈에서 로더 함를 생성, 내보내기
+export async function loader() {
+  const contacts = await getContacts();
+  return { contacts };
+}
+```
+
+### 라우트에 데이터 로더 설정 추가
+
+각 라우트에 `loader`를 추가하면, 라우트 컴포넌트에서 로더 데이터에 접근할 수 있다.
+
+```jsx
+import Root, { loader as rootLoader } from "./routes/root";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader, // ✅
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+    ],
+  },
+]);
+```
+
+### 3. 데이터 엑세스 후 렌더링
+
+`useLoaderData`를 사용하여 라우트 컴포넌트에서 로더 데이터에 접근할 수 있다.
+
+이를 통해 서버에 요청하지 않고 데이터를 가져오는 것이 가능하다.
+
+```jsx
+// root.jsx
+import { useLoaderData } from "react-router-dom";
+
+export default function Root() {
+  const { contacts } = useLoaderData(); // ✅
+
+  return (
+    <>
+      <div id="sidebar">
+        {/* ... */}
+
+        <nav>
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <Link to={`contacts/${contact.id}`}>
+                    {contact.first || contact.last ? (
+                      <>
+                        {contact.first} {contact.last}
+                      </>
+                    ) : (
+                      <i>이름 없음</i>
+                    )}{" "}
+                    {contact.favorite && <span>★</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>연락처 없음</i>
+            </p>
+          )}
+        </nav>
+
+        {/* ... */}
+      </div>
+    </>
+  );
+}
+```
