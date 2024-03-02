@@ -128,3 +128,38 @@ export default function Root() {
   );
 }
 ```
+
+<br/>
+
+## Client Side Routing : 클라이언트 사이드 라우팅
+
+클라이언트 사이드 라우팅을 사용하면, 앱이 서버에서 새 페이지를 가져오지 않고도, URL을 변경할 수 있다. 앱은 새로운 UI를 즉시 렌더링한다. (새로운 네트워크 요청이 없음)
+
+`<Link/>` 컴포넌트를 사용하면, 클라이언트 사이드 라우팅을 활성화할 수 있다.
+
+```jsx
+import { Link } from "react-router-dom";
+
+export default function Root() {
+  return (
+    <>
+      <div id="sidebar">
+        {/* ... */}
+
+        <nav>
+          <ul>
+            <li>
+              <Link to={`contacts/1`}>Your Name</Link>
+            </li>
+            <li>
+              <Link to={`contacts/2`}>Your Friend</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* ... */}
+      </div>
+    </>
+  );
+}
+```

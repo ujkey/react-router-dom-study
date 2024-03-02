@@ -1,6 +1,6 @@
 // 전역 레이아웃 정의
 
-import { Outlet } from "react-router-dom";}
+import { Outlet, Link } from "react-router-dom";
 
 const Root = () => {
   return (
@@ -26,15 +26,20 @@ const Root = () => {
         <nav>
           <ul>
             <li>
-              <a href={`/contacts/1`}>Your Name</a>
+              {/* <a href={`/contact/1`}>Your Name</a> */}
+              <Link to={`/contact/1`}>Your Name</Link>
             </li>
             <li>
-              <a href={`/contacts/2`}>Your Friend</a>
+              {/* <a href={`/contact/2`}>Your Friend</a> */}
+              <Link to={`/contact/2`}>Your Friend</Link>
             </li>
           </ul>
         </nav>
       </div>
-      <div id="detail"><Outlet/></div> {/* 하위 경로를 렌더링할 위치를 지정 */}
+      <div id="detail">
+        <Outlet />
+      </div>{" "}
+      {/* 하위 경로를 렌더링할 위치를 지정 */}
     </>
   );
 };
