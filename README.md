@@ -261,3 +261,91 @@ export default function Root() {
   );
 }
 ```
+
+<br/>
+
+## Form : 클라이언트 사이드 라우팅으로 데이터 전송
+
+아래는 `Form` 컴포넌트로 폼을 제출하여 연락처를 생성하는 예시이다. 서버로 데이터를 전송하지 않고 클라이언트 사이드 라우팅을 통해 데이터를 전달한다.
+
+### 1. 라우트 액션 생성
+
+라우트 액션은 라우트가 렌더링되기 전에 실행되는 함수이다. 이를 통해 URL과 관련된 다양한 작업을 수행할 수 있다.
+
+예를 들어, 사용자가 특정 URL로 이동하면 라우트가 렌더링되기 전에 해당 URL에 대한 데이터를 로드하거나, 라우트가 렌더링된 후에 추가적인 작업(업데이트)을 수행할 수 있다.
+
+다음은 빈 연락처를 생성하기 위한 라우트 액션을 정의한 코드이다.
+
+```jsx
+// root.jsx
+export async function action() {
+  const contact = await createContact(); // 빈 연락처를 생성(업데이트)
+  return { contact };
+}
+```
+
+### 2. Form 컴포넌트 추가
+
+`Form` 컴포넌트로 폼을 제출하면 라우터는 URL을 변경하고, 해당 URL에 맞는 컴포넌트를 렌더링한다.
+
+`Form` 컴포넌트를 사용하면 사용자가 입력한 데이터를 URL에 포함하여 전송할 수 있다.
+
+이를 통해 라우팅된 페이지 간에 데이터를 전달하고, 다른 페이지로 이동할 때 데이터를 유지할 수 있다.
+
+예시로는 사용자가 입력한 검색어를 URL에 추가하여 검색 결과를 표시하는 경우, 사용자가 폼을 제출할 때 해당 데이터를 URL에 포함하여 서버로 전송하는 경우 등이 있다.
+
+```jsx
+// root.jsx
+import { Form } from "react-router-dom";
+
+export async function action() {
+  const contact = await createContact();
+  return { contact };
+}
+
+/* ...  */
+
+export default function Root() {
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          {/* other code */}
+          <Form method="post">
+            <button type="submit">New</button>
+          </Form>
+        </div>
+
+        {/* ... */}
+      </div>
+    </>
+  );
+}
+```
+
+### 3. 라우트에 폼 액션 추가
+
+라우트에 `action`을 추가하면, 라우트가 렌더링되기 전에 해당 액션이 실행된다.
+
+```jsx
+// main.jsx
+/* other imports */
+
+import Root, {
+  loader as rootLoader,
+  action as rootAction,
+} from "./routes/root";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction, // ✅
+  },
+]);
+```
+
+<br/>

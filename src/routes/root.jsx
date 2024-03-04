@@ -1,7 +1,12 @@
 // 전역 레이아웃 정의
 
-import { Outlet, Link, useLoaderData } from "react-router-dom";
-import { getContacts } from "../contacts";
+import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { getContacts, createContact } from "../contacts";
+
+export async function action() {
+  const contacts = await createContact(); // 빈 연락처를 생성
+  return { contacts };
+}
 
 const Root = () => {
   const { contacts } = useLoaderData();
@@ -22,9 +27,13 @@ const Root = () => {
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
           </form>
-          <form method="post">
+
+          {/* <form method="post">
             <button type="submit">New</button>
-          </form>
+          </form> */}
+          <Form method="post">
+            <button type="submit">New</button>
+          </Form>
         </div>
         <nav>
           {/* access loader data */}
