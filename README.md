@@ -349,3 +349,54 @@ const router = createBrowserRouter([
 ```
 
 <br/>
+
+## URL Params in Loader : URL 파라미터로 데이터 로드하기
+
+라우트의 URL 파라미터를 사용하여 데이터를 로드할 수 있다.
+
+### 1. 로더에서 URL 파라미터 사용하기
+
+로더를 추가하고, `useLoaderData`를 사용하여 데이터에 엑세스한다.
+
+```jsx
+// contact.jsx
+import { useLoaderData } from "react-router-dom";
+import { getContact } from "../contacts";
+
+export async function loader({ params }) {
+  const contact = await getContact(params.contactId); // ✅
+  return { contact };
+}
+
+export default function Contact() {
+  const { contact } = useLoaderData(); // ✅
+  // ...
+}
+```
+
+### 2. 라우트에 로더 추가
+
+라우트에 로더를 추가하면, 라우트가 렌더링되기 전에 해당 로더가 실행된다.
+
+```jsx
+// main.jsx
+/* … */
+import Contact, { loader as contactLoader } from "./routes/contact";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader, // ✅
+      },
+    ],
+  },
+]);
+```

@@ -1,14 +1,23 @@
-import { Form } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
+import { getContact } from "../contacts";
+
+// URL 매개변수를 활용하여 레코드 탐색
+export async function loader({ params }) {
+  const contact = await getContact(params.contactId);
+  return { contact };
+}
 
 export default function Contact() {
-  const contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  const { contact } = useLoaderData(); // 로더에 엑세스하여 연락처 정보를 가져옴
+
+  //   const contact = {
+  //     first: "Your",
+  //     last: "Name",
+  //     avatar: "https://placekitten.com/g/200/200",
+  //     twitter: "your_handle",
+  //     notes: "Some notes",
+  //     favorite: true,
+  //   };
 
   return (
     <div id="contact">
@@ -59,7 +68,7 @@ export default function Contact() {
   );
 }
 
-function Favorite({ contact }) {
+function Favorite(contact) {
   // yes, this is a `let` for later
   let favorite = contact.favorite;
   return (
