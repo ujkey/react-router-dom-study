@@ -1,11 +1,11 @@
 // 전역 레이아웃 정의
 
-import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { Outlet, Link, useLoaderData, Form, redirect } from "react-router-dom";
 import { getContacts, createContact } from "../contacts";
 
 export async function action() {
   const contacts = await createContact(); // 빈 연락처를 생성
-  return { contacts };
+  return redirect(`/contacts/${contacts.id}/edit`); // 새로 생성된 연락처의 편집 페이지로 리디렉션
 }
 
 const Root = () => {
