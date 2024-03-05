@@ -8,6 +8,7 @@ import Root, {
 import ErrorPage from "./error-page";
 import Contact, { loader as contactLoader } from "./routes/contact";
 import "./index.css";
+import EditContact, { action as editAction } from "./routes/edit";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,12 @@ const router = createBrowserRouter([
         path: "contacts/:contactId", // URL 매개변수를 사용하여 동적 라우팅
         element: <Contact />,
         loader: contactLoader, // 연락처 라우트에 로더 설정
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: contactLoader,
+        action: editAction, // 라우트에 액션 설정
       },
     ],
   },

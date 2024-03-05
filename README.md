@@ -400,3 +400,51 @@ const router = createBrowserRouter([
   },
 ]);
 ```
+
+<br/>
+
+## Updating Data with FormData : 폼 데이터로 데이터 업데이트하기
+
+### 1. 폼 데이터 업데이트 액션 정의
+
+```jsx
+// contact.jsx
+import { Form, useLoaderData, redirect } from "react-router-dom";
+import { updateContact } from "../contacts";
+
+export async function action({ request, params }) {
+  const formData = await request.formData(); // 폼 데이터를 가져옴
+  const updates = Object.fromEntries(formData); // 폼 데이터를 객체로 변환
+  await updateContact(params.contactId, updates); // 연락처 업데이트
+  return redirect(`/contacts/${params.contactId}`); // 수정된 연락처로 리디렉션
+}
+```
+
+### 2. 라우트에 폼 액션 추가
+
+```jsx
+import EditContact, { action as editAction } from "./routes/edit";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: contactLoader,
+        action: editAction, // ✅
+      },
+    ],
+  },
+]);
+```
