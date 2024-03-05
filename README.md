@@ -454,3 +454,60 @@ const router = createBrowserRouter([
   },
 ]);
 ```
+
+<br/>
+
+## Active Link Styling : 활성 링크 스타일링
+
+`NavLink` 컴포넌트를 사용하면, 현재 URL에 맞는 링크에 스타일을 적용할 수 있다.
+
+`NavLink` 컴포넌트를 사용하여 링크를 렌더링하고, `className` 속성에 함수를 전달하여 스타일을 적용한다.
+
+이 함수는 사용자가 해당 `NavLink`의 URL에 있을 때 `isActive`가 true가 되고, 활성 상태가 되려고 할 때(여젆 ㅣ데이터가 로드 중) `isPending`이 true가 된다.
+
+이를 통해 사용자가 현재 어디에 있는지 쉽게 파악할 수 있으며, 클릭했지만 데이터가 로드되기를 기다리는 링크에 대해 즉각적인 피드백을 제공할 수 있다.
+
+사용자 경험을 향상시키기 위해 링크에 스타일을 적용하는 것이 좋아보인다.
+
+```jsx
+// root.jsx
+
+import {
+  Outlet,
+  NavLink,
+  useLoaderData,
+  Form,
+  redirect,
+} from "react-router-dom";
+
+export default function Root() {
+  return (
+    <>
+      <div id="sidebar">
+        {/* ... */}
+
+        <nav>
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <NavLink
+                    to={`contacts/${contact.id}`}
+                    className={({ isActive, isPending }) =>
+                      isActive ? "active" : isPending ? "pending" : ""
+                    }
+                  >
+                    {/* ... */}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{/* ... */}</p>
+          )}
+        </nav>
+      </div>
+    </>
+  );
+}
+```
