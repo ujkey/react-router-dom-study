@@ -511,3 +511,44 @@ export default function Root() {
   );
 }
 ```
+
+<br/>
+
+## Global Pending UI : 전역 로딩 UI
+
+React Router는 다음 페이지에 대한 데이터가 로딩되는 동안 이전 페이지를 그대로 유지한다.
+
+이때, 사용자는 앱이 응답하지 않는 것처럼 느낄 수 있다.
+
+사용자에게 로딩 중임을 알리는 전역 로딩 UI를 추가하여 앱의 사용자 경험을 향상시킬 수 있다.
+
+### `useNavigation` hook 활용
+
+`useNavigation`는 현재 탐색 상태를 반환한다. (`idel`, `submitting`, `loading`)
+
+`idel` 상태가 아닌 경우, 로딩 중임을 알리는 UI를 렌더링해보자. (페이드 인/아웃 효과, 스피너, 로딩 바 등)
+
+```jsx
+// root.jsx
+
+import {
+  // ...
+  useNavigation,
+} from "react-router-dom";
+
+export default function Root() {
+  const navigation = useNavigation();
+
+  return (
+    <>
+      <div id="sidebar">{/* ... */}</div>
+      <div
+        id="detail"
+        className={navigation.state === "loading" ? "loading" : ""}
+      >
+        <Outlet />
+      </div>
+    </>
+  );
+}
+```
