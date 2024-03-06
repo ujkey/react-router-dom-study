@@ -9,6 +9,7 @@ import ErrorPage from "./error-page";
 import Contact, { loader as contactLoader } from "./routes/contact";
 import "./index.css";
 import EditContact, { action as editAction } from "./routes/edit";
+import { action as destroyAction } from "./routes/destroy";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
         element: <EditContact />,
         loader: contactLoader,
         action: editAction, // 라우트에 액션 설정
+      },
+      {
+        path: "contacts/:contactId/destroy",
+        action: destroyAction,
+        errorElement: <div>에러가 발생했습니다.</div>, // 에러 경로에 대한 상황별 오류 메세지 생성
       },
     ],
   },

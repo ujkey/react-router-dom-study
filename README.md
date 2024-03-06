@@ -552,3 +552,52 @@ export default function Root() {
   );
 }
 ```
+
+<br/>
+
+## Deleting Records : 데이터 삭제하기
+
+`Form` 컴포넌트와 `라우트 액션`을 사용하여 클라이언트 사이드 라우팅으로 POST 요청을 만들어 데이터를 삭제해보자.
+
+작업이 리디렉션 된 후, React Router는 최신 값을 얻기 위해 페이지의 데이터에 대한 모든 로더를 호출한다.(재검증)
+
+`useLoaderData`는 새로운 값을 반환하고 컴포넌트를 다시 렌더링한다.
+
+### 1. 데이터 삭제 액션 정의
+
+```jsx
+// destroy.jsx
+import { redirect } from "react-router-dom";
+import { deleteContact } from "../contacts";
+
+export async function action({ params }) {
+  await deleteContact(params.contactId);
+  return redirect("/");
+}
+```
+
+### 2. 경로 추가 및 액션 설정
+
+`<Form action="destroy">`는 `contacts/:contactId/destroy` 경로와 일치하고, `destroyAction`을 실행한다.
+
+```jsx
+// main.jsx
+import { action as destroyAction } from "./routes/destroy";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    /* ... */
+    children: [
+      /* ... */
+      {
+        path: "contacts/:contactId/destroy",
+        action: destroyAction,
+        errorElement: <div>에러가 발생했습니다.</div>, // 에러 경로에 대한 상황별 오류 메세지 생성
+      },
+    ],
+  },
+]);
+
+/* ... */
+```
